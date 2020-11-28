@@ -18,8 +18,6 @@ RUN chown -R elasticsearch:elasticsearch /elasticsearch;
 
 RUN rm -rf ${SETUP_DIR}
 
-RUN echo "elasticsearch ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
 USER elasticsearch
 
 EXPOSE 9200
@@ -27,5 +25,3 @@ EXPOSE 9200
 VOLUME [ "/elasticsearch/data", "/elasticsearch/logs" ]
 
 ENTRYPOINT ["/elasticsearch/current/bin/elasticsearch" ]
-
-# ENTRYPOINT [ "/bin/bash" ]
