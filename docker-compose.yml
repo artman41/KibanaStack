@@ -1,0 +1,46 @@
+# Provides 2 endpoints: 
+#   - Elastic Search HTTP (http://localhost:9200/)
+#   - Kibana HTTP (http://localhost:8080/)
+version: '3'
+services:
+    elasticsearch:
+        image: elasticsearch
+        hostname: elasticsearch
+        ports: [ "9200:9200" ]
+        networks:
+            - elkstack
+        # volumes:
+        #     - data:/elasticsearch/data
+        #     - logs:/elasticsearch/logs
+    logstash:
+        image: logstash
+        hostname: logstash
+        networks:
+            - elkstack
+    kibana:
+        image: kibana
+        hostname: kibana
+        ports: [ "8080:5601" ]
+        networks:
+            - elkstack
+networks:
+    elkstack:
+        driver: bridge
+        ipam:
+            config:
+            - subnet: 172.25.0.0/24
+# Volumes need to be added for elasticsearch. Currently it 
+#  dynamically allocated them, but that results in different
+#  Volumes being used each time which doesn't really work in
+#  a use case where we want the data to be the same every time
+#  we boot up the cluster.
+#
+# volumes: 
+#     data:
+#         driver_opts:
+#             type: "nfs"
+#             device: "./data"
+#     logs:
+#         driver_opts:
+#             type: "nfs"
+#             device: "./logs"
