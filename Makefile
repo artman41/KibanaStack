@@ -5,6 +5,9 @@ ALL: start
 start: elasticsearch logstash kibana
 	docker-compose up
 
+stop:
+	docker-compose stop
+
 centos7:
 	make -C centos7/
 

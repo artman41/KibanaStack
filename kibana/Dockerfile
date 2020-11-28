@@ -21,3 +21,5 @@ USER kibana
 EXPOSE 5601
 
 ENTRYPOINT [ "/kibana/current/bin/kibana", "--config /kibana/kibana.yml" ]
+
+WORKDIR /kibana

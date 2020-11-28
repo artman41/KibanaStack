@@ -8,8 +8,9 @@ ADD https://artifacts.elastic.co/downloads/logstash/logstash-7.10.0-linux-x86_64
 
 RUN mkdir /logstash && tar -C /logstash -xzvf $SETUP_DIR/logstash.tar.gz && ln -s /logstash/* /logstash/current
 
-ADD logstash.conf /logstash/logstash.conf
-ADD logstash.yml /logstash/logstash.yml
+ADD logstash.conf /logstash/current/config/logstash.conf
+ADD logstash.yml  /logstash/current/config/logstash.yml
+ADD pipelines.yml /logstash/current/config/pipelines.yml
 
 RUN useradd logstash
 
@@ -21,4 +22,8 @@ USER logstash
 
 VOLUME [ "/logstash/data", "/logstash/logs" ]
 
-ENTRYPOINT [ "/logstash/current/bin/logstash", "-f /logstash/logstash.conf" ]
+#ENTRYPOINT [ "/logstash/current/bin/logstash", "-f /logstash/current/config/logstash.conf" ]
+
+ENTRYPOINT [ "/logstash/current/bin/logstash" ]
+
+WORKDIR /logstash

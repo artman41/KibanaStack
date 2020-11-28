@@ -25,3 +25,5 @@ EXPOSE 9200
 VOLUME [ "/elasticsearch/data", "/elasticsearch/logs" ]
 
 ENTRYPOINT ["/elasticsearch/current/bin/elasticsearch" ]
+
+WORKDIR /elasticsearch
