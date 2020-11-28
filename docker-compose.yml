@@ -9,18 +9,34 @@ services:
         ports: [ "9200:9200" ]
         networks:
             - elkstack
-        # volumes:
-        #     - data:/elasticsearch/data
-        #     - logs:/elasticsearch/logs
+        volumes:
+            # Note that the directories on the left half
+            #  need to exist. Otherwise, docker-compose
+            #  will fail since it will attempt to mount
+            #  non-existing directories.
+            - ./elasticsearch/data:/elasticsearch/data
+            - ./elasticsearch/logs:/elasticsearch/logs
     logstash:
         image: logstash
         hostname: logstash
+        depends_on: [ "elasticsearch" ]
+        # Remember to publish the ports you want as inputs
+        #  to logstash
+        # ports: [ "5044:5044" ]
         networks:
             - elkstack
+        volumes:
+            # Note that the directories on the left half
+            #  need to exist. Otherwise, docker-compose
+            #  will fail since it will attempt to mount
+            #  non-existing directories.
+            - ./logstash/data:/logstash/data
+            - ./logstash/logs:/logstash/logs
     kibana:
         image: kibana
         hostname: kibana
         ports: [ "8080:5601" ]
+        depends_on: [ "elasticsearch" ]
         networks:
             - elkstack
 networks:
@@ -29,18 +45,3 @@ networks:
         ipam:
             config:
             - subnet: 172.25.0.0/24
-# Volumes need to be added for elasticsearch. Currently it 
-#  dynamically allocated them, but that results in different
-#  Volumes being used each time which doesn't really work in
-#  a use case where we want the data to be the same every time
-#  we boot up the cluster.
-#
-# volumes: 
-#     data:
-#         driver_opts:
-#             type: "nfs"
-#             device: "./data"
-#     logs:
-#         driver_opts:
-#             type: "nfs"
-#             device: "./logs"
